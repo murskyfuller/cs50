@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    {% if results | length > 0 %}
+        <table class="table display">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">OCD</th>
+                </tr>
+                <tbody>
+                    {% for result in results %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <th>{{ result['first_name'] }}</th>
+                            <th>{{ result['last_name'] }}</th>
+                            <th>{{ result['gender'] }}</th>
+                            <th>{% if result['ocd'] == 'on' %}x{% endif %}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </thead>
+        </table>
+    {% else %}
+        <h3>No survey results</h3>
+    {% endif %}
+    <script>
+        $('table').DataTable();
+
+        // DataTable adds an unnecessary role to each tr
+        // throws error in validator
+        document.querySelectorAll('tr').forEach(row => {
+            if (row.hasAttribute('role') && row.getAttribute('role') === "row") {
+                row.removeAttribute('role');
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+
+{% block form %}
+    {% if cash > 0 %}
+        <form action="/buy" method="POST">
+            <input autofocus type="text" placeholder="Ticker symbol" name="symbol" class="form-control" required />
+            <input type="number" placeholder="Shares" name="shares" class="form-control" min="0" required />
+            <button type="submit" class="btn btn-primary">Buy</button>
+        </form>
+    {% else %}
+        <h2>No funds available</h2>
+    {% endif %}
+{% endblock %}

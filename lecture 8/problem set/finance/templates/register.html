@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <form action="/register" method="POST" class="needs-validation" novalidate>
+        <div class="form-group">
+            <input autofocus type="text" placeholder="Username" class="form-control" name="username" required />
+            <div id="username-feedback" class="feedback"></div>
+        </div>
+        <div class="form-group">
+            <input type="password" placeholder="Password" class="form-control" name="password" required pattern="^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#.?!@$%^&*-_]).{6,}$" />
+            <div id="password-feedback" class="feedback"></div>
+        </div>
+        <div class="form-group">
+            <input type="password" placeholder="Confirm password" class="form-control" name="confirmation" required />
+            <div id="confirmation-feedback" class="feedback"></div>
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+    <script>
+        $(document).ready(function () {
+            var usernameCheck = null;
+
+            $("input[name='username']").keyup(function (event) {
+                // stop any current check request, since the input has changed
+                if (usernameCheck) usernameCheck.abort();
+
+                usernameCheck = $.get({ url: '/check', data: { username: this.value } }, function (result) {
+                    const usernameFeedback = $('#username-feedback')
+                    // make sure the feedback is visible, even if form hasn't been fully validated
+                    usernameFeedback.css('display', 'block');
+
+                    if (!result) // username is not available
+                    {
+                        usernameFeedback.removeClass('valid invalid');
+                        usernameFeedback.addClass('invalid');
+                        usernameFeedback.html('Username is unavailable');
+                    }
+                    else
+                    {
+                        usernameFeedback.removeClass('valid invalid');
+                        usernameFeedback.addClass('valid');
+                        usernameFeedback.html('Looks good!');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

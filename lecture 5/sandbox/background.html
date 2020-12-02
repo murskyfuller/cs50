@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>
+            background
+        </title>
+    </head>
+    <body>
+        <button value="red">R</button>
+        <button value="green">G</button>
+        <button value="blue">B</button>
+    </body>
+
+            <script>
+
+            let body = document.querySelector('body');
+            document.querySelectorAll('button').forEach(button => {
+                button.onclick = function()
+                {
+                    body.style.backgroundColor = this.value;
+                }
+            });
+
+        </script>
+</html>

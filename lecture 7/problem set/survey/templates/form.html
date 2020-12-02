@@ -1,0 +1,154 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+    <!-- http://getbootstrap.com/docs/4.1/content/typography/ -->
+    <h1 class="mb-3">Form</h1>
+
+    <!-- http://getbootstrap.com/docs/4.1/components/forms/ -->
+    <form action="/form" method="post" novalidate>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first-name" class="form-control" required pattern="^[a-zA-Z\b-.]+$" />
+                <div id="first-name-feedback"></div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" name="last-name" class="form-control" pattern="^[a-zA-Z\b-.]*$" />
+                <div id="last-name-feedback"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select class="form-control" id="gender" name="gender">
+                <option value="f">Female</option>
+                <option value="m">Male</option>
+                <option value="qnb">Genderqueer/Non-Binary</option>
+                <option value="na">Prefer not to say</option>
+            </select>
+            <div id="gender-feedback"></div>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="confirm" name="confirm" />
+            <label for="confirm" class="form-check-label">I acknowledge that this checkbox is not required</label>
+            <div id="confirm-feedback"></div>
+        </div>
+        <div class="form-row">
+            <!-- http://getbootstrap.com/docs/4.1/components/buttons/ -->
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+
+
+    </form>
+
+    <script>
+        const INPUT_VALIDATORS = {
+            'first-name': nameValidator,
+            'last-name': nameValidator,
+            'gender': genderValidator
+        };
+
+        let form = document.querySelector('form');
+
+        form.onsubmit = function() {
+            // if the form failed to pass validation, then update
+            // the display
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                // display more informative messages for each input in the form
+                form.querySelectorAll('input,select').forEach(input => {
+                    if (input.checkValidity()) {
+                        let inputFeedback = document.querySelector(`#${input.id}-feedback`);
+
+                        if (inputFeedback) {
+                            inputFeedback.innerHTML = "Looks good!";
+                            inputFeedback.className = "valid-feedback";
+                        }
+                    } else {
+                        displayError(input);
+                    }
+                });
+
+                addClass(this, 'was-validated');
+
+                return false;
+            }
+
+            // otherwise submit the form
+            return true;
+        }
+
+        // catch-all / switch
+        function displayError(inputElement) {
+            const validator = INPUT_VALIDATORS[inputElement.id];
+
+            // make sure the validator function exists
+            if (!validator) {
+                console.warn(`No validation method for input: ${inputElement.id}`);
+                return;
+            }
+
+            // make sure the feedback element exists to display the message with
+            const feedbackElement = document.querySelector(`#${inputElement.id}-feedback`);
+            if (!feedbackElement) {
+                console.warn(`No feedback element for input: ${inputElement.id}`);
+                return;
+            }
+
+            validator(inputElement);
+        }
+
+        // display more informative errors for first and last name inputs
+        function nameValidator(inputElement) {
+            const feedbackElement = document.querySelector(`#${inputElement.id}-feedback`);
+
+            // consolidate errors using HTML form constraint API
+            // https://developer.mozilla.org/en-US/docs/Web/API/ValidityState
+            let message = "";
+            console.dir(inputElement.validity);
+            if (inputElement.validity.valueMissing) {
+                message = "First name required";
+            } else if (inputElement.validity.patternMismatch) {
+                message = "Please enter a name with upper and lower case letters, underscore, hyphen, period and space";
+            }
+
+            // got through all the checks without determining a message, so provide
+            // some feedback
+            if (!message) {
+                message += "Unknown error";
+            }
+
+            // update the display
+            feedbackElement.innerHTML = message;
+            feedbackElement.className = "invalid-feedback";
+        }
+
+        // display more informative errors for gender input
+        function genderValidator(inputElement) {
+            const feedbackElement = document.querySelector(`#${inputElement.id}-feedback`);
+
+            // consolidate errors using HTML form constraint API
+            // https://developer.mozilla.org/en-US/docs/Web/API/ValidityState
+            let message = "";
+            if (inputElement.validity.valueMissing) {
+                message = "Gender required";
+            }
+
+            // got through all the checks without determining a message, so provide
+            // some feedback
+            if (!message) {
+                message += "Unknown error";
+            }
+
+            // update the display
+            feedbackElement.innerHTML = message;
+            feedbackElement.className = "invalid-feedback";
+        }
+
+    </script>
+
+{% endblock %}

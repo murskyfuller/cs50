@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    {% block form %}{% endblock %}
+    <table class="table margin-top">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Symbol</th>
+                <th>Shares</th>
+                <th>Current price</th>
+                <th>Current Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if summary|length > 0 %}
+                {% for row in summary %}
+                    <tr>
+                        <th>{{ row.company_name }}</th>
+                        <th>{{ row.symbol }}</th>
+                        <th>{{ row.shares }}</th>
+                        <th>{{ row.price|usd }}</th>
+                        <th>{{ row.value|usd }}</th>
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <th colspan="4" class="table-summary">Stock value:</th>
+                        <th>{{ total_stock_value|usd }}</th>
+                    </tr>
+            {% else %}
+                <th colspan="5">No previous purchases</th>
+            {% endif %}
+            <tr>
+                <th colspan="4" class="table-summary">Cash:</th>
+                <th>{{ cash|usd }}</th>
+            </tr>
+            <tr>
+                <th colspan="4" class="table-summary">Total value:</th>
+                <th>{{ total_value|usd }}</th>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+
+{% block form %}
+    {% if summary|length > 0 %}
+        <form action="/sell" method="POST">
+            <select autofocus name="symbol" class="form-control" required>
+                <option value="" disabled selected>Stock symbol</option>
+                {% for stock in summary %}
+                    <option value="{{ stock.symbol }}">{{ stock.symbol }}</option>
+                {% endfor %}
+            </select>
+            <input type="number" placeholder="Shares" name="shares" class="form-control" min="0" required />
+            <button type="submit" class="btn btn-primary">Sell</button>
+        </form>
+    {% else %}
+        <h2>No stocks available to sell</h2>
+    {% endif %}
+{% endblock %}

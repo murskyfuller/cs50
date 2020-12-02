@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>Total (USD)</th>
+                <th>Purchased</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if history|length > 0 %}
+                {% for row in history %}
+                    {% if row.shares > 0 %}
+                        <tr class="shares-bought">
+                    {% else %}
+                        <tr class="shares-sold">
+                    {% endif %}
+                        <th>{{ row.symbol }}</th>
+                        <th>{{ row.shares }}</th>
+                        <th>{{ row.price|usd }}</th>
+                        <th>{{ -row.value|usd }}</th>
+                        <td>{{ row.date|datetime('full') }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <th>No previous purchases</th>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

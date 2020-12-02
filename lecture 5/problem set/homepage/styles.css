@@ -1,0 +1,51 @@
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+header {
+    font-family: 'Red Hat Display', sans-serif;
+    font-size: large;
+    padding-bottom: 8px;
+}
+
+main {
+    font-size: medium;
+    flex-grow: 1;
+}
+
+footer {
+    font-size: small;
+    padding-bottom: 18px;
+}
+
+.container-fluid {
+    max-width: 768px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.navbar {
+    padding-left: 0px;
+}
+
+.navbar-brand {
+    color: mediumpurple;
+}
+
+.navbar-brand:hover {
+    color: mediumpurple;
+}
+
+.nav-item a {
+    color: mediumturquoise;
+}
+
+.nav-item a:hover {
+    text-decoration: underline;
+}
+
+.nav-item.active a {
+    font-weight: bold;
+    color: mediumpurple;
+}

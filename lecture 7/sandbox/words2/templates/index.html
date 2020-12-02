@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <input autocomplete="off" autofocus name="q" placeholder="Query" type="text" />
+    <ul></ul>
+{% endblock %}
+
+{% block bodyscripts %}
+    <script>
+        let input = document.querySelector('input');
+        input.onkeyup = function() {
+            $.get(`/search?q=${input.value}`, function(data) {
+                let newHTML = "";
+                data.forEach(result => {
+                    newHTML += `<li>${result}</li>`
+                });
+
+                document.querySelector("ul").innerHTML = newHTML;
+            })
+        }
+    </script>
+{% endblock %}

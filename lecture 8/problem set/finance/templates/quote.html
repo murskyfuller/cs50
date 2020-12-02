@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <form action="/quote" method="POST">
+        <input autofocus type="text" name="symbol" placeholder="Ticker symbol" value="{{query}}" class="form-control" required />
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    {% if results|length > 0 %}
+        <table class="table margin-top">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Symbol</th>
+                    <th>Price (usd)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                    <tr>
+                        <th>{{ row.name }}</th>
+                        <th>{{ row.symbol }}</th>
+                        <th>{{ row.price|usd }}</th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elif query is defined %}
+        <h2>No stocks found</h2>
+    {% endif %}
+{% endblock %}
